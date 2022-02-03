@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:state_management/second_view.dart';
 import 'package:state_management/text_state.dart';
+import 'package:state_management/theme_state.dart';
 import 'text_state_provider.dart';
 
 void main() {
@@ -11,24 +13,27 @@ void main() {
   );
 }
 
-class MyApp extends StatelessWidget {
+class MyApp extends ConsumerWidget {
   const MyApp({Key? key}) : super(key: key);
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
+    final ThemeState themeState = ref.watch<ThemeState>(themeStateProvider);
     return MaterialApp(
       title: 'Flutter Demo',
       theme: ThemeData(
-        primarySwatch: Colors.blue,
-      ),
-      home: SafeArea(
-        child: Column(
-          children: const [
-            Widget1(),
-            Widget2(),
-            Widget3(),
-            Widget4(),
-          ],
+          primarySwatch: Colors.blue,
+          scaffoldBackgroundColor: themeState.scaffoldColor),
+      home: Scaffold(
+        body: SafeArea(
+          child: Column(
+            children: const [
+              Widget1(),
+              Widget2(),
+              Widget3(),
+              Widget4(),
+            ],
+          ),
         ),
       ),
     );
@@ -82,7 +87,12 @@ class Widget4 extends ConsumerWidget {
     print('Widget 4 rebuild');
     return ElevatedButton(
       child: Text(appState.language),
-      onPressed: () {},
+      onPressed: () {
+        Navigator.push(
+          context,
+          MaterialPageRoute(builder: (context) => const SecondView()),
+        );
+      },
     );
   }
 }
